@@ -1,17 +1,19 @@
 ## live-view-goals
 
-collab site... two clients going at once we see the communication. 
+## collab site... two clients going at once we see the communication. 
 1) https://dennisbeatty.com/2019/04/24/how-to-create-a-todo-list-with-phoenix-liveview.html
 2) https://github.com/dnsbty/live_view_todos
 
-validation ... 
+## validation ... 
 1) https://elixircasts.io/phoenix-live-view
 2) 
 
-talk explaining why live view can be better than elixir channels:
-<br/>https://www.youtube.com/watch?time_continue=6&v=8xJzHq8ru0M
+## mccord talk 
+explaining why live view can be better than elixir channels and umbrella-project example:
+<br/>talk: https://www.youtube.com/watch?time_continue=6&v=8xJzHq8ru0M
+<br/>example: https://github.com/chrismccord/phoenix_live_view_example
 
-setup asdf the right way:
+## setup asdf the right way:
 <br/>https://www.cogini.com/blog/using-asdf-with-elixir-and-phoenix/
 <br/>below is the mac instructions, see the link for the linux instructions.
 ```bash
