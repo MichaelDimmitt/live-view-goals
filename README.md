@@ -16,6 +16,7 @@ explaining why live view can be better than elixir channels and umbrella-project
 ## setup asdf the right way:
 <br/>https://www.cogini.com/blog/using-asdf-with-elixir-and-phoenix/
 <br/>below is the mac instructions, see the link for the linux instructions.
+
 ```bash
 {
   brew install asdf;
@@ -31,3 +32,74 @@ explaining why live view can be better than elixir channels and umbrella-project
   { asdf global erlang 21.3; asdf global elixir 1.8.1; asdf global nodejs 10.15.3; };
   { mix deps.get; mix deps.compile; mix compile; mix ecto.setup; };
 };
+```
+
+## live-view breakdown:
+proj/lib/demo_web/index.html.eex: 
+<br/>`<li><%= link "Thermostat", to: Routes.live_path(@conn, DemoWeb.ThermostatLive) %></li>`
+
+proj/lib/demo_web/router.ex:
+```elixir
+defmodule DemoWeb.Router do
+  use DemoWeb, :router
+  import Phoenix.LiveView.Router
+  pipeline :browser do
+    ...
+    plug Phoenix.LiveView.Flash
+    ...
+  end
+  scope "/", DemoWeb do
+    ...
+    live "/thermostat", ThermostatLive
+    ... 
+  end
+```
+
+proj/lib/demo_web/live/thermostat_live.ex: 
+```elixir
+def render(assigns) do
+    ~L"""
+    <div class="thermostat">
+      <div class="bar <%= @mode %>">
+        <a href="#" phx-click="toggle-mode"><%= @mode %></a>
+        <span><%= strftime!(@time, "%r") %></span>
+      </div>
+      <div class="controls">
+        <span class="reading"><%= @val %></span>
+        <button phx-click="dec" class="minus">-</button>
+        <button phx-click="inc" class="plus">+</button>
+        <span class="weather">
+          <%= live_render(@socket, DemoWeb.WeatherLive) %>
+        </span>
+      </div>
+    </div>
+    """
+  end
+  def mount(_session, socket) do
+    if connected?(socket), do: :timer.send_interval(100, self(), :tick)
+    {:ok, assign(socket, val: 72, mode: :cooling, time: :calendar.local_time())}
+  end
+```
+
+proj/lib/demo_web/live/weather_live.ex
+```elixir
+defmodule DemoWeb.WeatherLive do
+  use Phoenix.LiveView
+
+  def render(assigns) do
+    ~L"""
+    <div>
+      <form phx-submit="set-location">
+        <input name="location" placeholder="Location" value="<%= @location %>"/>
+        <%= @weather %>
+      </form>
+    </div>
+    """
+  end
+
+  def mount(_session, socket) do
+    send(self(), {:put, "Austin"})
+    {:ok, assign(socket, location: nil, weather: "...")}
+  end
+end
+```
