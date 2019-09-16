@@ -33,6 +33,8 @@ explaining why live view can be better than elixir channels and umbrella-project
   { mix deps.get; mix deps.compile; mix compile; mix ecto.setup; };
 };
 ```
+## compatability check for elixir and erlang:
+https://hexdocs.pm/elixir/master/compatibility-and-deprecations.html#compatibility-between-elixir-and-erlang-otp
 
 ## live-view breakdown:
 proj/lib/demo_web/index.html.eex: 
