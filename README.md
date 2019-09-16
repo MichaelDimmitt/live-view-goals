@@ -59,7 +59,9 @@ defmodule DemoWeb.Router do
 
 proj/lib/demo_web/live/thermostat_live.ex: 
 ```elixir
-def render(assigns) do
+defmodule DemoWeb.ThermostatLive do
+  use Phoenix.LiveView
+  def render(assigns) do
     ~L"""
     <div class="thermostat">
       <div class="bar <%= @mode %>">
@@ -81,13 +83,13 @@ def render(assigns) do
     if connected?(socket), do: :timer.send_interval(100, self(), :tick)
     {:ok, assign(socket, val: 72, mode: :cooling, time: :calendar.local_time())}
   end
+end
 ```
 
 proj/lib/demo_web/live/weather_live.ex
 ```elixir
 defmodule DemoWeb.WeatherLive do
   use Phoenix.LiveView
-
   def render(assigns) do
     ~L"""
     <div>
